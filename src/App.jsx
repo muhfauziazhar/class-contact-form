@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Router from "./Router";
+import Router from "./router/Router";
 import { v4 as uuidv4 } from "uuid";
 
 class App extends Component {

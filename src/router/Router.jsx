@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import DataTable from "./components/DataTable";
-import InputForm from "./components/InputForm";
-import Layout from "./Layout";
+import DataTable from "../components/DataTable";
+import InputForm from "../components/InputForm";
+import Layout from "../layout/Layout";
+import UserLogin from "../pages/UserLogin";
 
 const Router = ({
     contacts,
@@ -48,6 +49,7 @@ const Router = ({
                         </Layout>
                     }
                 />
+                <Route path="/auth/user-login" element={<UserLogin />} />
             </Routes>
         </BrowserRouter>
     );

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Cookies from "js-cookie";
 
 library.add(fas);
 
@@ -15,11 +16,18 @@ class Navigation extends Component {
                 localStorage.getItem("color-theme") === "dark" ||
                 (!("color-theme" in localStorage) &&
                     window.matchMedia("(prefers-color-scheme: dark)").matches),
+            user: undefined,
         };
     }
 
     componentDidMount() {
         this.updateColorTheme();
+
+        if (Cookies.get("token_user")) {
+            if (this.state.user === undefined) {
+                this.setState({ user: JSON.parse(Cookies.get("user")) });
+            }
+        }
     }
 
     componentDidUpdate() {
@@ -43,6 +51,12 @@ class Navigation extends Component {
             this.state.isDark ? "light" : "dark"
         );
         this.updateColorTheme();
+    };
+
+    handleLogout = () => {
+        Cookies.remove("token_user");
+        Cookies.remove("user");
+        window.location = "/";
     };
 
     render() {
@@ -94,6 +108,25 @@ class Navigation extends Component {
                                     Tambah Kontak
                                 </Link>
                             </li>
+                            {this.state.user ? (
+                                <li>
+                                    <span
+                                        onClick={this.handleLogout}
+                                        className="cursor-pointer block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                    >
+                                        Logout
+                                    </span>
+                                </li>
+                            ) : (
+                                <li>
+                                    <Link
+                                        to={"/auth/user-login"}
+                                        className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                    >
+                                        Login
+                                    </Link>
+                                </li>
+                            )}
                         </ul>
                     </Navbar.Collapse>
                 </Navbar>
