@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const DataTable = ({ contacts = [], handleEdit, handleDelete }) => {
+const DataTable = ({ contacts, handleEdit, handleDelete }) => {
+    const [user, setUser] = useState(undefined);
+
+    useEffect(() => {
+        if (Cookies.get("token_user")) {
+            if (user === undefined) {
+                setUser(JSON.parse(Cookies.get("user")));
+            }
+        }
+    }, [user, setUser]);
+
     const navigate = useNavigate();
     return (
         <>
@@ -13,9 +23,14 @@ const DataTable = ({ contacts = [], handleEdit, handleDelete }) => {
                             <th scope="col" className="py-3 px-3">
                                 No
                             </th>
-                            <th scope="col" className="py-3 px-3">
-                                Aksi
-                            </th>
+                            {user ? (
+                                <th scope="col" className="py-3 px-3">
+                                    Aksi
+                                </th>
+                            ) : (
+                                ""
+                            )}
+
                             <th scope="col" className="py-3 px-3">
                                 Nama
                             </th>
@@ -44,29 +59,34 @@ const DataTable = ({ contacts = [], handleEdit, handleDelete }) => {
                                         <td className="py-2 px-3 ">
                                             {index + 1}
                                         </td>
-                                        <td className="py-2 px-3">
-                                            <button
-                                                value={res.id}
-                                                onClick={(e) =>
-                                                    handleEdit(
-                                                        e,
-                                                        navigate(
-                                                            `/contact/edit/${res.id}`
+                                        {user ? (
+                                            <td className="py-2 px-3">
+                                                <button
+                                                    value={res.id}
+                                                    onClick={(e) =>
+                                                        handleEdit(
+                                                            e,
+                                                            navigate(
+                                                                `/contact/edit/${res.id}`
+                                                            )
                                                         )
-                                                    )
-                                                }
-                                                className="bg-yellow-200 hover:bg-yellow-400 text-white font-bold py-2 px-6 rounded-full m-2"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                value={res.id}
-                                                onClick={handleDelete}
-                                                className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-full m-2"
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
+                                                    }
+                                                    className="bg-yellow-200 hover:bg-yellow-400 text-white font-bold py-2 px-6 rounded-full m-2"
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    value={res.id}
+                                                    onClick={handleDelete}
+                                                    className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-full m-2"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        ) : (
+                                            ""
+                                        )}
+
                                         <th className="py-2 px-3 ">
                                             {res.name}
                                         </th>
