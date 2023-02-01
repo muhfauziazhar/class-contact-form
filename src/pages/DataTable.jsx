@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useTable, useSortBy, useGlobalFilter, useFilters } from "react-table";
+import {
+    useTable,
+    useSortBy,
+    useGlobalFilter,
+    useFilters,
+    usePagination,
+} from "react-table";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -62,14 +68,14 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                                 navigate(`/contact/edit/${row.original.id}`)
                             )
                         }
-                        className="bg-yellow-200 hover:bg-yellow-400 text-white font-bold py-2 px-6 rounded-full m-2"
+                        className="bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-6 rounded-full m-2"
                     >
                         Edit
                     </button>
                     <button
                         id={row.original.id}
                         onClick={handleDelete}
-                        className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-full m-2"
+                        className="bg-red-300 hover:bg-red-500 text-black font-bold py-2 px-4 rounded-full m-2"
                     >
                         Delete
                     </button>
@@ -113,7 +119,15 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
         getTableProps,
         getTableBodyProps,
         headerGroups,
-        rows,
+        page,
+        nextPage,
+        previousPage,
+        canNextPage,
+        canPreviousPage,
+        pageOptions,
+        gotoPage,
+        pageCount,
+        setPageSize,
         prepareRow,
         state,
         setGlobalFilter,
@@ -121,13 +135,15 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
         {
             columns,
             data,
+            initialState: { pageSize: 4 },
         },
         useGlobalFilter,
         useFilters,
-        useSortBy
+        useSortBy,
+        usePagination
     );
 
-    const { globalFilter } = state;
+    const { globalFilter, pageIndex, pageSize } = state;
 
     return (
         <>
@@ -171,7 +187,7 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                         ))}
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {rows.map((row, i) => {
+                        {page.map((row, i) => {
                             prepareRow(row);
                             return (
                                 <tr
@@ -193,6 +209,69 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                         })}
                     </tbody>
                 </table>
+            </div>
+            <div className="flex flex-col items-center mt-3">
+                {/* Help text */}
+                <span className="text-sm text-gray-700 dark:text-gray-700">
+                    Page{" "}
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                        {pageIndex + 1}
+                    </span>{" "}
+                    of{" "}
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                        {pageOptions.length}
+                    </span>
+                </span>
+                <div>
+                    {/* Jika ingin menambahkan custom page size */}
+                    <span>
+                        <input
+                            onChange={(event) => {
+                                const pageNumber = event.target.value
+                                    ? Number(event.target.value) - 1
+                                    : 0;
+                                gotoPage(pageNumber);
+                            }}
+                            defaultValue={pageIndex + 1}
+                            type="number"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+                            placeholder="Go to Page"
+                        />
+                    </span>
+                </div>
+                <div className="inline-flex gap-1 mt-2 xs:mt-0">
+                    {/* Buttons */}
+                    <button
+                        onClick={() => gotoPage(0)}
+                        disabled={!canPreviousPage}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-violet-400 rounded-lg hover:bg-violet-600  dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        {"<<"}
+                    </button>
+                    <button
+                        onClick={() => previousPage()}
+                        disabled={!canPreviousPage}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-violet-400 rounded-lg  hover:bg-violet-600 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        {"< "}
+                        Prev
+                    </button>
+                    <button
+                        onClick={() => nextPage()}
+                        disabled={!canNextPage}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white  bg-violet-400 rounded-lg hover:bg-violet-600 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        Next
+                        {" >"}
+                    </button>
+                    <button
+                        onClick={() => gotoPage(pageCount - 1)}
+                        disabled={!canNextPage}
+                        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-violet-400 rounded-lg hover:bg-violet-600 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    >
+                        {">>"}
+                    </button>
+                </div>
             </div>
         </>
     );
