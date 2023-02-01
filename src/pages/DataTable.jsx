@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Search from "../components/Search";
 
 library.add(fas);
 
@@ -97,16 +98,28 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
     );
     const data = useMemo(() => contacts, [contacts]);
 
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-        useTable(
-            {
-                columns,
-                data,
-            },
-            useSortBy
-        );
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+        state,
+        setGlobalFilter,
+    } = useTable(
+        {
+            columns,
+            data,
+        },
+        useGlobalFilter,
+        useSortBy
+    );
+
+    const { globalFilter } = state;
+
     return (
         <>
+            <Search filter={globalFilter} setFilter={setGlobalFilter} />
             <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
                 <table
                     className="w-full text-sm text-left text-gray-500 dark:text-gray-400"
