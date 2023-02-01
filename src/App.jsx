@@ -43,6 +43,10 @@ class App extends Component {
                 if (this.state.currentId === -1) {
                     newContacts.push({
                         id: uuidv4(),
+                        avatar: `https://ui-avatars.com/api/?name=${name.replace(
+                            / /g,
+                            "+"
+                        )}`,
                         name,
                         email,
                         subject,
@@ -55,6 +59,10 @@ class App extends Component {
                     );
                     newContacts[userIndex] = {
                         id: this.state.currentId,
+                        avatar: `https://ui-avatars.com/api/?name=${name.replace(
+                            / /g,
+                            "+"
+                        )}`,
                         name,
                         email,
                         subject,

@@ -13,6 +13,7 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Search from "../components/Search";
 import ColumnSearch from "../components/ColumnSearch";
+import { Avatar } from "flowbite-react";
 
 library.add(fas);
 
@@ -29,6 +30,13 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
     }, []);
 
     const ColumnsBeforeLogin = [
+        {
+            Header: "Avatar",
+            accessor: "avatar",
+            Filter: ColumnSearch,
+            disableFilters: true,
+            Cell: ({ cell: { value } }) => <Avatar img={value} />,
+        },
         {
             Header: "Name",
             accessor: "name",
@@ -81,6 +89,13 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                     </button>
                 </div>
             ),
+        },
+        {
+            Header: "Avatar",
+            accessor: "avatar",
+            Filter: ColumnSearch,
+            disableFilters: true,
+            Cell: ({ cell: { value } }) => <Avatar img={value} />,
         },
         {
             Header: "Name",
