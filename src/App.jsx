@@ -80,26 +80,21 @@ class App extends Component {
         );
     };
 
-    handleEdit(event, callBackAction) {
-        let idContact = event.target.value;
+    handleEdit(id, callBackAction) {
         this.setState((prevState) => ({
-            currentId: idContact,
+            currentId: id,
             input: {
                 ...prevState.input,
-                ...this.state.contacts.find(
-                    (contact) => contact.id === idContact
-                ),
+                ...this.state.contacts.find((contact) => contact.id === id),
             },
         }));
         callBackAction;
     }
 
     handleDelete = (event) => {
-        let idContact = event.target.value;
+        let id = event.target.id;
         this.setState((prevState) => ({
-            contacts: prevState.contacts.filter(
-                (contact) => contact.id !== idContact
-            ),
+            contacts: prevState.contacts.filter((contact) => contact.id !== id),
         }));
     };
 
@@ -107,7 +102,7 @@ class App extends Component {
         return (
             <div
                 className="bg-white dark:bg-gray-500"
-                style={{ height: "100vh" }}
+                style={{ minHeight: "100vh" }}
             >
                 <Router
                     contacts={this.state.contacts}

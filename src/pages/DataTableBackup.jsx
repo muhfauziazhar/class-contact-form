@@ -62,10 +62,9 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                                         {user ? (
                                             <td className="py-2 px-3">
                                                 <button
-                                                    value={res.id}
-                                                    onClick={(e) =>
+                                                    onClick={() =>
                                                         handleEdit(
-                                                            e,
+                                                            res.id,
                                                             navigate(
                                                                 `/contact/edit/${res.id}`
                                                             )
@@ -76,8 +75,9 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                                                     Edit
                                                 </button>
                                                 <button
-                                                    value={res.id}
-                                                    onClick={handleDelete}
+                                                    onClick={() =>
+                                                        handleDelete(res.id)
+                                                    }
                                                     className="bg-rose-500 hover:bg-rose-700 text-white font-bold py-2 px-4 rounded-full m-2"
                                                 >
                                                     Delete
