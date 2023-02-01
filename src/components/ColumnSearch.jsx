@@ -1,12 +1,10 @@
-import React, { useState } from "react";
-import { useAsyncDebounce } from "react-table";
+import React from "react";
 
-const Search = ({ filter, setFilter }) => {
-    const [value, setValue] = useState(filter);
-    const onChange = useAsyncDebounce((value) => {
-        setFilter(value || undefined);
-    }, 500);
-
+const ColumnSearch = ({ column }) => {
+    const { filterValue, setFilter } = column;
+    const handleChange = (event) => {
+        setFilter(event.target.value);
+    };
     return (
         <>
             <form className="flex my-3">
@@ -27,14 +25,11 @@ const Search = ({ filter, setFilter }) => {
                         </svg>
                     </div>
                     <input
-                        onChange={(event) => {
-                            setValue(event.target.value);
-                            onChange(event.target.value);
-                        }}
-                        value={value || ""}
+                        onChange={handleChange}
+                        value={filterValue || ""}
                         type="text"
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
-                        placeholder="Global Search"
+                        placeholder="Search"
                     />
                 </div>
             </form>
@@ -42,4 +37,4 @@ const Search = ({ filter, setFilter }) => {
     );
 };
 
-export default Search;
+export default ColumnSearch;

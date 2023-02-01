@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useTable, useSortBy, useGlobalFilter } from "react-table";
+import { useTable, useSortBy, useGlobalFilter, useFilters } from "react-table";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Search from "../components/Search";
+import ColumnSearch from "../components/ColumnSearch";
 
 library.add(fas);
 
@@ -25,28 +26,33 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
         {
             Header: "Name",
             accessor: "name",
+            Filter: ColumnSearch,
         },
         {
             Header: "Email",
             accessor: "email",
+            Filter: ColumnSearch,
         },
         {
             Header: "Subject",
             accessor: "subject",
+            Filter: ColumnSearch,
         },
         {
             Header: "Category",
             accessor: "category",
+            Filter: ColumnSearch,
         },
         {
             Header: "Message",
             accessor: "message",
+            Filter: ColumnSearch,
         },
     ];
 
     const ColumnsAfterLogin = [
         {
-            Header: "Aksi",
+            Header: "Action",
             Cell: ({ row }) => (
                 <div>
                     <button
@@ -73,22 +79,27 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
         {
             Header: "Name",
             accessor: "name",
+            Filter: ColumnSearch,
         },
         {
             Header: "Email",
             accessor: "email",
+            Filter: ColumnSearch,
         },
         {
             Header: "Subject",
             accessor: "subject",
+            Filter: ColumnSearch,
         },
         {
             Header: "Category",
             accessor: "category",
+            Filter: ColumnSearch,
         },
         {
             Header: "Message",
             accessor: "message",
+            Filter: ColumnSearch,
         },
     ];
 
@@ -112,6 +123,7 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
             data,
         },
         useGlobalFilter,
+        useFilters,
         useSortBy
     );
 
@@ -148,6 +160,11 @@ const DataTable = ({ contacts, handleEdit, handleDelete }) => {
                                                 ""
                                             )}
                                         </span>
+                                        <div>
+                                            {column.canFilter
+                                                ? column.render("Filter")
+                                                : null}
+                                        </div>
                                     </th>
                                 ))}
                             </tr>
