@@ -5,6 +5,7 @@ import InputForm from "../pages/InputForm";
 import Layout from "../layout/Layout";
 import UserLogin from "../pages/UserLogin";
 import LoginRoute from "./LoginRoute";
+import News from "../pages/News";
 
 const Router = ({
     contacts,
@@ -55,6 +56,14 @@ const Router = ({
                     }
                 />
                 <Route path="/auth/user-login" element={<UserLogin />} />
+                <Route
+                    path="/news"
+                    element={
+                        <Layout>
+                            <News />
+                        </Layout>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );

@@ -2,6 +2,8 @@ import "regenerator-runtime";
 import React, { Component } from "react";
 import Router from "./router/Router";
 import { v4 as uuidv4 } from "uuid";
+import { Provider } from "react-redux";
+import store from "./store";
 
 class App extends Component {
     constructor(props) {
@@ -109,18 +111,20 @@ class App extends Component {
 
     render() {
         return (
-            <div
-                className="bg-white dark:bg-gray-500"
-                style={{ minHeight: "100vh" }}
-            >
-                <Router
-                    contacts={this.state.contacts}
-                    handleEdit={this.handleEdit}
-                    handleDelete={this.handleDelete}
-                    input={this.state.input}
-                    handleSubmit={this.handleSubmit}
-                />
-            </div>
+            <Provider store={store}>
+                <div
+                    className="bg-white dark:bg-gray-500"
+                    style={{ minHeight: "100vh" }}
+                >
+                    <Router
+                        contacts={this.state.contacts}
+                        handleEdit={this.handleEdit}
+                        handleDelete={this.handleDelete}
+                        input={this.state.input}
+                        handleSubmit={this.handleSubmit}
+                    />
+                </div>
+            </Provider>
         );
     }
 }
