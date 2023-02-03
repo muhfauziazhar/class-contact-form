@@ -1,13 +1,19 @@
-import React from "react";
-import Cookies from "js-cookie";
-import { Navigate } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
+import {Navigate} from 'react-router-dom';
 
-const LoginRoute = (props) => {
-    if (Cookies.get("token_user") === undefined) {
-        return <Navigate to={"/auth/user-login"} />;
-    } else if (Cookies.get("token_user") !== undefined) {
-        return props.children;
-    }
+const LoginRoute = ({children}) => {
+  if (Cookies.get('token_user') === undefined) {
+    return <Navigate to={'/auth/user-login'} />;
+  } else if (Cookies.get('token_user') !== undefined) {
+    return children;
+  }
 };
+
+LoginRoute.propTypes = {
+  children: PropTypes.node,
+};
+
 
 export default LoginRoute;
