@@ -1,8 +1,8 @@
 import 'regenerator-runtime';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Router from './router/Router';
-import {v4 as uuidv4} from 'uuid';
-import {Provider} from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { Provider } from 'react-redux';
 import store from './store';
 
 class App extends Component {
@@ -34,68 +34,57 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem(
-          'contacts',
-          JSON.stringify(this.state.contacts),
-      );
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
   }
 
   handleSubmit = (values, callBackAction) => {
-    const {name, email, subject, category, message} = values;
+    const { name, email, subject, category, message } = values;
     this.setState(
-        (prevState) => {
-          const newContacts = [...prevState.contacts];
-          if (this.state.currentId === -1) {
-            newContacts.push({
-              id: uuidv4(),
-              avatar: `https://ui-avatars.com/api/?name=${name.replace(
-                  / /g,
-                  '+',
-              )}`,
-              name,
-              email,
-              subject,
-              category,
-              message,
-            });
-          } else {
-            const userIndex = newContacts.findIndex(
-                (contact) => contact.id === this.state.currentId,
-            );
-            newContacts[userIndex] = {
-              id: this.state.currentId,
-              avatar: `https://ui-avatars.com/api/?name=${name.replace(
-                  / /g,
-                  '+',
-              )}`,
-              name,
-              email,
-              subject,
-              category,
-              message,
-            };
-          }
-          localStorage.setItem('contacts', JSON.stringify(newContacts));
-          return {
-            contacts: newContacts,
-            input: {
-              name: '',
-              email: '',
-              subject: '',
-              category: '',
-              message: '',
-            },
-            currentId: -1,
+      (prevState) => {
+        const newContacts = [...prevState.contacts];
+        if (this.state.currentId === -1) {
+          newContacts.push({
+            id: uuidv4(),
+            avatar: `https://ui-avatars.com/api/?name=${name.replace(/ /g, '+')}`,
+            name,
+            email,
+            subject,
+            category,
+            message,
+          });
+        } else {
+          const userIndex = newContacts.findIndex((contact) => contact.id === this.state.currentId);
+          newContacts[userIndex] = {
+            id: this.state.currentId,
+            avatar: `https://ui-avatars.com/api/?name=${name.replace(/ /g, '+')}`,
+            name,
+            email,
+            subject,
+            category,
+            message,
           };
-        },
-        () => {
-          callBackAction;
-        },
+        }
+        localStorage.setItem('contacts', JSON.stringify(newContacts));
+        return {
+          contacts: newContacts,
+          input: {
+            name: '',
+            email: '',
+            subject: '',
+            category: '',
+            message: '',
+          },
+          currentId: -1,
+        };
+      },
+      () => {
+        callBackAction;
+      }
     );
   };
 
-  handleEdit(id, callBackAction) {
+  handleEdit = (id, callBackAction) => {
     this.setState((prevState) => ({
       currentId: id,
       input: {
@@ -104,7 +93,7 @@ class App extends Component {
       },
     }));
     callBackAction;
-  }
+  };
 
   handleDelete = (event) => {
     const id = event.target.id;
@@ -116,10 +105,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div
-          className="bg-white dark:bg-gray-500"
-          style={{minHeight: '100vh'}}
-        >
+        <div className="bg-white dark:bg-gray-500" style={{ minHeight: '100vh' }}>
           <Router
             contacts={this.state.contacts}
             handleEdit={this.handleEdit}
